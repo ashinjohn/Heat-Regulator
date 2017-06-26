@@ -30,7 +30,8 @@ int timer=0;     //timer setting
 int maxt=0;      // maximum temperature 
 int mint=0;      // minimumtemperature 
 int cel;
-
+int hours=0;     // timer hours
+int mins=0;      // timer minutes
 
 #include <LiquidCrystal.h>
 LiquidCrystal lcd(8,9,13,12,11,10 );
@@ -123,6 +124,57 @@ button = digitalRead(5);
                             lcd.print((char)223); //degree sign
                             lcd.print("C");
   
+                            delay(200);
+                                                    
+                              button=HIGH;
+                              button = digitalRead(5);
+                              if (button==LOW){ 
+                                  button=HIGH;
+                                  lcd.setCursor(0,1);
+                                  lcd.print ("breaking to selector");
+                                  break;
+                                  }
+                                  
+                                  
+                                 
+                        } //while 1 inside case for switch
+                        
+                        lcd.clear();
+                        lcd.setCursor(0,0);
+                        lcd.print("      MENU");
+                        delay(100);
+                                  
+                        
+                        
+                        break;// break to main
+                        lcd.setCursor(0,1);
+                        lcd.print ("breaking to main");
+                          
+                        break;                // case 1 break
+                case 2: 
+                        delay(100);
+                        while (1){
+                          lcd.clear();
+                          lcd.setCursor(0,0);
+                          lcd.print("     TIMER      ");
+                        
+                                                   
+                            hours = analogRead(0);
+                            
+                            hours = map(hours, 0, 1023, 0, 12);
+                            hours = constrain(hours, 0, 12);
+                            lcd.setCursor(0,1);
+                            lcd.print("HOURS:");
+                            lcd.print(hours);
+                            
+                            mins = analogRead(1);
+                            
+                            mins = map(mins, 0, 1023, 0,60);
+                            mins = constrain(mins, 0, 60);
+                            lcd.setCursor(9,1);
+                            lcd.print("MINS:");
+                            lcd.print(mins);
+  
 
 
   
@@ -153,14 +205,7 @@ button = digitalRead(5);
                         lcd.setCursor(0,1);
                         lcd.print ("breaking to main");
                           
-                        break;                // case 1 break
-                case 2: 
-                        lcd.clear();
-                        while (1)
-                        {lcd.setCursor(0,0);
-                        lcd.print ("case 2");
-                        }
-                        break;                 //case 2 break   
+                        break;                // case 2 break
                 
               }//switch closing  
           }//if button low after selecting
