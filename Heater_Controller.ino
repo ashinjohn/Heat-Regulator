@@ -32,6 +32,7 @@ int mint=0;      // minimumtemperature
 int cel;
 int hours=0;     // timer hours
 int mins=0;      // timer minutes
+int sec=0;       // timer seconds
 
 #include <LiquidCrystal.h>
 LiquidCrystal lcd(8,9,13,12,11,10 );
@@ -206,6 +207,93 @@ button = digitalRead(5);
                         lcd.print ("breaking to main");
                           
                         break;                // case 2 break
+
+                case 4: 
+                        delay(100);
+                        while (1){
+                          lcd.clear();
+                          lcd.setCursor(0,0);
+                          lcd.print("   COUNT DOWN     ");
+
+                        if (mins==0&&hours==0&&sec==0)
+                        {lcd.setCursor(0,1);
+                            lcd.print("Timer Reset !     ");
+
+                              start:
+                              button=HIGH;
+                              button = digitalRead(5);
+                              if (button==LOW){ 
+                                  button=HIGH;
+                                  lcd.setCursor(0,1);
+                                  lcd.print ("breaking to selector");
+                                  break;
+                                  }
+                              goto start;
+                            
+                            
+                          }
+
+                         else if (mins<=0&&hours>0){
+                          mins=60;
+                          hours--;
+                          }
+
+                          else if (sec<=0&&mins>0){
+                            mins--;
+                            sec=60;
+                            }
+
+                          else {
+                            sec--;
+                            }
+                                                  
+                            
+                            lcd.setCursor(0,1);
+                            lcd.print("H:");
+                            lcd.print(hours);
+                            
+                            lcd.setCursor(6,1);
+                            lcd.print("M:");
+                            lcd.print(mins);
+    
+                            lcd.setCursor(11,1);
+                            lcd.print("S:");
+                            lcd.print(sec);
+  
+
+  
+                            delay(1000);
+                            
+                          
+                              button=HIGH;
+                              button = digitalRead(5);
+                              if (button==LOW){ 
+                                  button=HIGH;
+                                  lcd.setCursor(0,1);
+                                  lcd.print ("breaking to selector");
+                                  break;
+                                  }
+                                  
+                                  
+                                 
+                        } //while 1 inside case for switch
+                        
+                        lcd.clear();
+                        lcd.setCursor(0,0);
+                        lcd.print("      MENU");
+                        delay(100);
+                                  
+                        
+                        
+                        break;// break to main
+                        lcd.setCursor(0,1);
+                        lcd.print ("breaking to main");
+                          
+                        break;                // case 3 break
+
+
+
+
                 
               }//switch closing  
           }//if button low after selecting
