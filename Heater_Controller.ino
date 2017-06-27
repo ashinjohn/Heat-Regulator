@@ -1,6 +1,7 @@
 /*****************************************************************
 Project     : Heat Controller
 Description : Maintain temperature in a Cabin as per the values given.
+              With Temperature Adjustmet and Timer
 
 Programmer  : Ashin Basil John
 Board       : Arduino Uno
@@ -131,8 +132,6 @@ button = digitalRead(5);
                               button = digitalRead(5);
                               if (button==LOW){ 
                                   button=HIGH;
-                                  lcd.setCursor(0,1);
-                                  lcd.print ("breaking to selector");
                                   break;
                                   }
                                   
@@ -144,12 +143,7 @@ button = digitalRead(5);
                         lcd.setCursor(0,0);
                         lcd.print("      MENU");
                         delay(100);
-                                  
-                        
-                        
-                        break;// break to main
-                        lcd.setCursor(0,1);
-                        lcd.print ("breaking to main");
+                        break;
                           
                         break;                // case 1 break
                 case 2: 
@@ -175,19 +169,13 @@ button = digitalRead(5);
                             lcd.setCursor(9,1);
                             lcd.print("MINS:");
                             lcd.print(mins);
-  
-
-
-  
+ 
                             delay(200);
-                            
-                          
+
                               button=HIGH;
                               button = digitalRead(5);
                               if (button==LOW){ 
                                   button=HIGH;
-                                  lcd.setCursor(0,1);
-                                  lcd.print ("breaking to selector");
                                   break;
                                   }
                                   
@@ -198,40 +186,59 @@ button = digitalRead(5);
                         lcd.clear();
                         lcd.setCursor(0,0);
                         lcd.print("      MENU");
-                        delay(100);
-                                  
+                        delay(100); 
                         
-                        
-                        break;// break to main
-                        lcd.setCursor(0,1);
-                        lcd.print ("breaking to main");
-                          
+                        break;  
                         break;                // case 2 break
 
                 case 4: 
                         delay(100);
                         while (1){
                           lcd.clear();
-                          lcd.setCursor(0,0);
-                          lcd.print("   COUNT DOWN     ");
+                          lcd.write(1);
+                        
+                          cel = (5.0 * analogRead(2) * 100.0) / 1024;
+                          lcd.setCursor(2,0); 
+                          lcd.print(cel);
+                          lcd.print((char)223); //degree sign
+                          lcd.print("C");
 
                         if (mins==0&&hours==0&&sec==0)
                         {lcd.setCursor(0,1);
                             lcd.print("Timer Reset !     ");
+                            digitalWrite(4,HIGH);
 
                               start:
                               button=HIGH;
                               button = digitalRead(5);
                               if (button==LOW){ 
                                   button=HIGH;
-                                  lcd.setCursor(0,1);
-                                  lcd.print ("breaking to selector");
+                                  digitalWrite(4,LOW);
                                   break;
                                   }
                               goto start;
                             
                             
                           }
+
+                         else  if (mint==0||maxt==0)
+                        {lcd.setCursor(0,1);
+                            lcd.print("Set Temperature First! ");
+                           
+
+                              start1:
+                              button=HIGH;
+                              button = digitalRead(5);
+                              if (button==LOW){ 
+                                  button=HIGH;
+                                  digitalWrite(4,LOW);
+                                  break;
+                                  }
+                              goto start1;
+                            
+                            
+                          }
+
 
                          else if (mins<=0&&hours>0){
                           mins=60;
@@ -246,6 +253,17 @@ button = digitalRead(5);
                           else {
                             sec--;
                             }
+
+                        if (cel>=maxt){
+                          lcd.setCursor(0,1);
+                          lcd.print("Heater OFF ");
+                          digitalWrite(3,LOW); 
+                          }
+                       else if (cel<=mint||cel<maxt){
+                          lcd.setCursor(0,1);
+                          lcd.print("Heater ON ");
+                          digitalWrite(3,HIGH); 
+                          }
                                                   
                             
                             lcd.setCursor(0,1);
@@ -269,8 +287,38 @@ button = digitalRead(5);
                               button = digitalRead(5);
                               if (button==LOW){ 
                                   button=HIGH;
-                                  lcd.setCursor(0,1);
-                                  lcd.print ("breaking to selector");
+                                  break;
+                                  }
+                                  
+                                  
+                                 
+                        } //while 1 inside case for switch
+                        
+                        lcd.clear();
+                        lcd.setCursor(0,0);
+                        lcd.print("      MENU");
+                        delay(100);  
+                        
+                        break;
+                          
+                        break;                // case 4 break
+ case 3: 
+                        delay(100);
+                        while (1){
+                          lcd.clear();
+                          lcd.setCursor(0,0);
+                          lcd.print("HEATER ON");
+                          delay(500);
+                                                    
+                              button=HIGH;
+                              button = digitalRead(5);
+                              if (button==LOW){ 
+                                  button=HIGH;
+                                   lcd.setCursor(0,0);
+                                   lcd.print("HEATER OFF");
+                                   delay(500);
+                                                                      
+                                  
                                   break;
                                   }
                                   
@@ -282,15 +330,9 @@ button = digitalRead(5);
                         lcd.setCursor(0,0);
                         lcd.print("      MENU");
                         delay(100);
-                                  
-                        
-                        
-                        break;// break to main
-                        lcd.setCursor(0,1);
-                        lcd.print ("breaking to main");
+                        break;
                           
                         break;                // case 3 break
-
 
 
 
@@ -317,7 +359,7 @@ button = digitalRead(5);
         else if (analogRead(0)<=180){
           selector=3;
           lcd.setCursor(0,1);
-          lcd.print("STOP            ");
+          lcd.print("MANUAL HEATER ON ");
           }
       else if (analogRead(0)>180){
           selector=4;
@@ -325,23 +367,8 @@ button = digitalRead(5);
           lcd.print("START           ");
           }
      
-              
-         /*     tempc = analogRead(0);
-                tempc = analogRead(1);
                 
-                cel = (5.0 * analogRead(2) * 100.0) / 1024;
-                lcd.clear();
-                lcd.setCursor(0,0);
-                lcd.write(1);
-                lcd.setCursor(2,0); 
-                lcd.print(cel);
-                lcd.print((char)223); //degree sign
-                lcd.print("C");
-                delay(100); */
-           
-          
-
- 
+    
       }// menu while 
     
     
