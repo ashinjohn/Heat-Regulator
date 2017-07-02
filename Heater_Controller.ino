@@ -202,11 +202,23 @@ button = digitalRead(5);
                           lcd.print(cel);
                           lcd.print((char)223); //degree sign
                           lcd.print("C");
+                          lcd.print(" ");
+                          lcd.print(maxt);
+                          lcd.print(" ");
+                          lcd.print(mint);
+                          
+                          
 
                         if (mins==0&&hours==0&&sec==0)
-                        {lcd.setCursor(0,1);
+                        {   lcd.clear();
+                            lcd.setCursor(0,1);
                             lcd.print("Timer Reset !     ");
                             digitalWrite(4,HIGH);
+
+                            lcd.setCursor(0,0);
+                            lcd.print("HEATER OFF");
+                            digitalWrite(3,LOW);
+                                   
 
                               start:
                               button=HIGH;
@@ -255,13 +267,13 @@ button = digitalRead(5);
                             }
 
                         if (cel>=maxt){
-                          lcd.setCursor(0,1);
-                          lcd.print("Heater OFF ");
+                          lcd.setCursor(12,0);
+                          lcd.print("OFF");
                           digitalWrite(3,LOW); 
                           }
-                       else if (cel<=mint||cel<maxt){
-                          lcd.setCursor(0,1);
-                          lcd.print("Heater ON ");
+                       else if (cel<=mint){
+                          lcd.setCursor(12,0);
+                          lcd.print("ON");
                           digitalWrite(3,HIGH); 
                           }
                                                   
@@ -308,6 +320,7 @@ button = digitalRead(5);
                           lcd.clear();
                           lcd.setCursor(0,0);
                           lcd.print("HEATER ON");
+                          digitalWrite(3,HIGH);
                           delay(500);
                                                     
                               button=HIGH;
@@ -316,6 +329,7 @@ button = digitalRead(5);
                                   button=HIGH;
                                    lcd.setCursor(0,0);
                                    lcd.print("HEATER OFF");
+                                   digitalWrite(3,LOW);
                                    delay(500);
                                                                       
                                   
